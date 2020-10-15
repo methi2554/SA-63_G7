@@ -1,196 +1,344 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { FC, useEffect } from 'react';
+import { Content, Header, Page, pageTheme } from '@backstage/core';
+import Swal from 'sweetalert2'; // alert
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuIcon from '@material-ui/icons/Menu';
 import {
- Content,
- Header,
- Page,
- pageTheme,
- ContentHeader,
-} from '@backstage/core';
+  Container,
+  Grid,
+  FormControl,
+  Select,
+  InputLabel,
+  MenuItem,
+  TextField,
+  Avatar,
+  Button,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+
+} from '@material-ui/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
 import { Alert } from '@material-ui/lab';
 import { DefaultApi } from '../../api/apis';
-import {TextField,InputAdornment} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { EntEmployee } from '../../api/models/EntEmployee'; // import interface Employee
+import { EntDrugType } from '../../api/models/EntDrugType'; // import interface Drugtype
+import { EntDisease } from '../../api/models/EntDisease'; // import interface Disease
+import { EntDrug } from '../../api';
 
-const useStyles = makeStyles((theme: Theme) =>
- createStyles({
-   root: {
-     display: 'flex',
-     flexWrap: 'wrap',
-     justifyContent: 'center',
-   },
-   margin: {
-     margin: theme.spacing(3),
-   },
-   withoutLabel: {
-     marginTop: theme.spacing(3),
-   },
-   textField: {
-     width: '25ch',
-   },
- }),
-);
-
-const diseaseState = {
-  emp_id: 1,
-  name: '',
-  severity_id: 1,
-  manner: '',
-  contagion: '',
-  agency_id: [1,2] 
- };
-
-const employeeState = [
-  {
-    emp_id: 1,
-    name: 'toei'
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
   },
-  {
-    emp_id: 2,
-    name: 'kob'
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: '25ch',
+    color: "blue"
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  paper: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
+  formControl: {
+    width: 455,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+  buttonSty: {
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%',
+    marginBottom: 50
   }
-];
-const angencyState = [
-  {
-    angency_id: 1,
-    name: 'มทส'
-  },
-  {
-    angency_id: 2,
-    name: 'มหาราช'
-  }
-];
-const severityState = [
-  {
-    severity_id: 1,
-    name: 'เริ่มต้น'
-  },
-  {
-    severity_id: 2,
-    name: 'รุนแรง'
-  },
-  {
-    severity_id: 3,
-    name: 'รุนแรงมาก'
-  }
-];
-export default function Create() {
- const classes = useStyles();
- const profile = { givenName: 'to Software Analysis 63' };
- const api = new DefaultApi();
- 
- const [status, setStatus] = useState(false);
- const [alert, setAlert] = useState(true);
- const [disease, setDisease] = useState(diseaseState);
- const [employee, setEmployee] = useState(employeeState);
- const [angency, setAngency] = useState(angencyState);
- const [severity, setSeverity] = useState(severityState);
 
- const handleInputDiseaseChange = (event: any) => {
-   const { id, value } = event.target;
-   setDisease({ ...disease, [id]: value });
- };
- 
- const CreateUser = async () => {
-  //  const res:any = await api.createUser({ user });
-  //  setStatus(true);
-  //  if (res.id != ''){
-  //    setAlert(true);
-  //  } else {
-  //    setAlert(false);
-  //  }
-  // const timer = setTimeout(() => {
-  //   setStatus(false);
-  // }, 1000);
-  setStatus(true);
-  setAlert(false);
-   const timer = setTimeout(() => {
-     setStatus(false);
-   }, 1000);
- };
- 
- return (
-   <Page theme={pageTheme.home}>
-     <Header
-       title={`ระบบจัดการโรคติดต่อ`}
-       subtitle="Some quick intro and links."
-     ></Header>
-     <Content>
-       <ContentHeader title="เพิ่มข้อมูลโรคติดต่อ">
-         {status ? (
-           <div>
-             {alert ? (
-               <Alert severity="success">
-                 This is a success alert — check it out!
-               </Alert>
-             ) : (
-               <Alert severity="warning" style={{ marginTop: 20 }}>
-                 This is a warning alert — check it out!
-               </Alert>
-             )}
-           </div>
-         ) : null}
-       </ContentHeader>
-       <div className={classes.root}>
-         <form noValidate autoComplete="off">
-           <FormControl
-             fullWidth
-             className={classes.margin}
-             variant="outlined"
-           >
-            <Autocomplete
-              id="combo-box-demo"
-              options={employee}
-              getOptionLabel={(option) =>option.emp_id + ' : ' + option.name}
-              renderInput={(params) => <TextField {...params} label="รหัสพนักงาน" variant="outlined" />}
-            />
-             <TextField
-                style={{ marginTop: 20 }}
-               id="name"
-               label="ชื่อโรค"
-               variant="outlined"
-               type="string"
-               size="medium"
-               value={disease.name}
-               onChange={handleInputDiseaseChange}
-             />
-            <Autocomplete
-                style={{ marginTop: 20 }}
-              id="combo-box-demo"
-              options={angency}
-              getOptionLabel={(option) => option.angency_id + ' - ' + option.name}
-              renderInput={(params) => <TextField {...params} label="ระดับความรุนแรง" variant="outlined" />}
-            />
+}));
 
-           </FormControl>
-           
+  // alert setting
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: toast => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
 
-           <div className={classes.margin}>
-             <Button
-               onClick={() => {
-                 CreateUser();
-               }}
-               variant="contained"
-               color="primary"
-             >
-               Submit
-             </Button>
-             <Button
-               style={{ marginLeft: 20 }}
-               component={RouterLink}
-               to="/"
-               variant="contained"
-             >
-               Back
-             </Button>
-           </div>
-         </form>
-       </div>
-     </Content>
-   </Page>
- );
+interface Drug {
+  employee: string;
+  name: string;
+  drugtype: string;
+  howto: string;
+  property: string;
+  disease: string;
+
+  // create_by: number;
 }
+const Drug: FC<{}> = () => {
+  const classes = useStyles();
+  const http = new DefaultApi();
+
+  
+  
+    const [drug, setDrug] = React.useState<Partial<Drug>>({});
+    const [showInputError,setShowInputError] = React.useState(false); // for error input show 
+    const [employees, setEmployees] = React.useState<EntEmployee[]>([]);
+    const [diseases, setDiseases] =   React.useState<EntDisease[]>([]);
+    const [drugtypes, setDrugTypes] = React.useState<EntDrugType[]>([]);
+  
+  
+
+  const getEmployee = async () => {
+    const res = await http.listEmployee({ limit: 10, offset: 0 });
+    setEmployees(res);
+  };
+
+  const getDisease = async () => {
+    const res = await http.listDisease({ limit: 10, offset: 0 });
+    setDiseases(res);
+  };
+
+  const getDrugtype = async () => {
+    const res = await http.listDrugtype({ limit: 10, offset: 0 });
+    setDrugTypes(res);
+  };
+  // Lifecycle Hooks
+  useEffect(() => {
+    getEmployee();
+    getDisease();
+    getDrugtype();
+  }, []);
+
+  // set data to object playlist_video
+  const handleChange = (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+  ) => {
+    const name = event.target.name as keyof typeof Drug;
+    const { value } = event.target;
+    setDrug({ ...drug, [name]: value });
+    console.log(drug);
+  };
+
+  // clear input form
+  function clear() {
+    setDrug({});
+  }
+
+  // function save data
+  function save() {
+    setShowInputError(true)
+    let {employee,  name , drugtype , property , howto , disease} = drug;
+    if( !employee || !name || !drugtype || !property || !howto || !disease){
+      Toast.fire({
+        icon: 'error',
+        title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+      });
+      return;
+    }
+    const apiUrl = 'http://localhost:8080/api/v1/drugs';
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(drug),
+    };
+
+    console.log(drug); // log ดูข้อมูล สามารถ Inspect ดูข้อมูลได้ F12 เลือก Tab Console
+
+    fetch(apiUrl, requestOptions)
+      .then(response => {
+        console.log(response)
+        response.json()
+        if (response.ok === true) {
+          clear();
+          Toast.fire({
+            icon: 'success',
+            title: 'บันทึกข้อมูลสำเร็จ',
+          });
+        } else {
+          Toast.fire({
+            icon: 'error',
+            title: 'บันทึกข้อมูลไม่สำเร็จ',
+          });
+        }
+      })
+  }
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            ระบบบันทึกข้อมูลยา
+          </Typography>
+          <div>
+            <IconButton
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="sm">
+
+        <Grid container spacing={3}>
+
+          <Grid item xs={10}>
+            <h2 > ข้อมูลยา </h2>
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel >รหัสบุคลากร</InputLabel>
+              <Select
+                name="employee"
+                value={drug.employee || ''}
+                onChange={handleChange}
+                label="รหัสบุคลากร"
+              >
+                {employees.map(item => {
+                  return (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.name} + {item.userid}
+
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={10}>
+            <TextField
+              required={true}
+              error={!drug.name && showInputError}
+              id="name"
+              name="name"
+              type="string"
+              label="ชื่อยา , วัคซีน "
+              variant="outlined"
+              fullWidth
+              multiline
+              value={drug.name || ""}
+              onChange={handleChange}
+            />
+          </Grid>
+
+
+
+          <Grid item xs={12}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel >ประเภทยา</InputLabel>
+              <Select
+                name="drugtype"
+                value={drug.drugtype || ''}
+                onChange={handleChange}
+                label="ประเภทยา"
+                fullWidth
+              >
+                {drugtypes.map(item => {
+                  return (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={10}>
+            <TextField
+              required={true}
+              error={!drug.property && showInputError}            
+              name="property"
+              label="สรรพคุณยา"
+              variant="outlined"
+              fullWidth
+              multiline
+              value={drug.property || ""}
+              onChange={handleChange}
+            />
+          </Grid>
+
+          <Grid item xs={10}>
+            <TextField
+              required={true}
+              error={!drug.howto && showInputError}            
+              name="howto"
+              label="วิธีการใช้"
+              variant="outlined"
+              fullWidth
+              multiline
+              value={drug.howto || ""}
+              onChange={handleChange}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel>โรคติดต่อ</InputLabel>
+              <Select
+                name="disease"
+                value={drug.disease || ''}
+                onChange={handleChange}
+                label="โรคติดต่อ"
+              >
+                {diseases.map(item => {
+                  return (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          
+
+          <Grid item xs={10}>
+            <Button
+              name="saveData"
+              size="large"
+              variant="contained"
+              color="primary"
+              disableElevation
+              className={classes.buttonSty}
+              onClick={save}
+            >
+              บันทึกข้อมูลผู้ป่วย
+              </Button>
+          </Grid>
+        </Grid>
+      </Container>
+    </div>
+  );
+}
+export default Drug;
+

@@ -13,7 +13,7 @@ import {
 } from '@backstage/core';
  
 const WelcomePage: FC<{}> = () => {
- const student = { name: '',lastname: 'poonkasem' };
+ const student = { name: '',lastname: 'tangon' };
  
  return (
    <Page theme={pageTheme.home}>

@@ -8,24 +8,93 @@ import (
 )
 
 var (
-	// UsersColumns holds the columns for the "users" table.
-	UsersColumns = []*schema.Column{
+	// DiseasesColumns holds the columns for the "diseases" table.
+	DiseasesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "age", Type: field.TypeInt},
 		{Name: "name", Type: field.TypeString},
 	}
-	// UsersTable holds the schema information for the "users" table.
-	UsersTable = &schema.Table{
-		Name:        "users",
-		Columns:     UsersColumns,
-		PrimaryKey:  []*schema.Column{UsersColumns[0]},
+	// DiseasesTable holds the schema information for the "diseases" table.
+	DiseasesTable = &schema.Table{
+		Name:        "diseases",
+		Columns:     DiseasesColumns,
+		PrimaryKey:  []*schema.Column{DiseasesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{},
+	}
+	// DrugsColumns holds the columns for the "drugs" table.
+	DrugsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "howto", Type: field.TypeString},
+		{Name: "property", Type: field.TypeString},
+		{Name: "disease_drug", Type: field.TypeInt, Nullable: true},
+		{Name: "drug_type_drug", Type: field.TypeInt, Nullable: true},
+		{Name: "employee_drug", Type: field.TypeInt, Nullable: true},
+	}
+	// DrugsTable holds the schema information for the "drugs" table.
+	DrugsTable = &schema.Table{
+		Name:       "drugs",
+		Columns:    DrugsColumns,
+		PrimaryKey: []*schema.Column{DrugsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:  "drugs_diseases_drug",
+				Columns: []*schema.Column{DrugsColumns[4]},
+
+				RefColumns: []*schema.Column{DiseasesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:  "drugs_drug_types_drug",
+				Columns: []*schema.Column{DrugsColumns[5]},
+
+				RefColumns: []*schema.Column{DrugTypesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:  "drugs_employees_drug",
+				Columns: []*schema.Column{DrugsColumns[6]},
+
+				RefColumns: []*schema.Column{EmployeesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// DrugTypesColumns holds the columns for the "drug_types" table.
+	DrugTypesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+	}
+	// DrugTypesTable holds the schema information for the "drug_types" table.
+	DrugTypesTable = &schema.Table{
+		Name:        "drug_types",
+		Columns:     DrugTypesColumns,
+		PrimaryKey:  []*schema.Column{DrugTypesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{},
+	}
+	// EmployeesColumns holds the columns for the "employees" table.
+	EmployeesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "userid", Type: field.TypeInt},
+	}
+	// EmployeesTable holds the schema information for the "employees" table.
+	EmployeesTable = &schema.Table{
+		Name:        "employees",
+		Columns:     EmployeesColumns,
+		PrimaryKey:  []*schema.Column{EmployeesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		UsersTable,
+		DiseasesTable,
+		DrugsTable,
+		DrugTypesTable,
+		EmployeesTable,
 	}
 )
 
 func init() {
+	DrugsTable.ForeignKeys[0].RefTable = DiseasesTable
+	DrugsTable.ForeignKeys[1].RefTable = DrugTypesTable
+	DrugsTable.ForeignKeys[2].RefTable = EmployeesTable
 }

@@ -33,14 +33,14 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/users": {
+        "/diseases": {
             "get": {
-                "description": "list user entities",
+                "description": "list disease entities",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "List user entities",
-                "operationId": "list-user",
+                "summary": "List disease entities",
+                "operationId": "list-disease",
                 "parameters": [
                     {
                         "type": "integer",
@@ -61,7 +61,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/ent.User"
+                                "$ref": "#/definitions/ent.Disease"
                             }
                         }
                     },
@@ -80,23 +80,23 @@ var doc = `{
                 }
             },
             "post": {
-                "description": "Create user",
+                "description": "Create disease",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Create user",
-                "operationId": "create-user",
+                "summary": "Create disease",
+                "operationId": "create-disease",
                 "parameters": [
                     {
-                        "description": "User entity",
-                        "name": "user",
+                        "description": "Disease entity",
+                        "name": "disease",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ent.User"
+                            "$ref": "#/definitions/ent.Disease"
                         }
                     }
                 ],
@@ -104,7 +104,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ent.User"
+                            "$ref": "#/definitions/ent.Disease"
                         }
                     },
                     "400": {
@@ -122,18 +122,18 @@ var doc = `{
                 }
             }
         },
-        "/users/{id}": {
+        "/diseases/{id}": {
             "get": {
-                "description": "get user by ID",
+                "description": "get disease by ID",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get a user entity by ID",
-                "operationId": "get-user",
+                "summary": "Get a disease entity by ID",
+                "operationId": "get-disease",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User ID",
+                        "description": "Disease ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -143,7 +143,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ent.User"
+                            "$ref": "#/definitions/ent.Disease"
                         }
                     },
                     "400": {
@@ -167,30 +167,30 @@ var doc = `{
                 }
             },
             "put": {
-                "description": "update user by ID",
+                "description": "update disease by ID",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update a user entity by ID",
-                "operationId": "update-user",
+                "summary": "Update a disease entity by ID",
+                "operationId": "update-disease",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User ID",
+                        "description": "Disease ID",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "User entity",
-                        "name": "user",
+                        "description": "Disease entity",
+                        "name": "disease",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ent.User"
+                            "$ref": "#/definitions/ent.Disease"
                         }
                     }
                 ],
@@ -198,7 +198,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ent.User"
+                            "$ref": "#/definitions/ent.Disease"
                         }
                     },
                     "400": {
@@ -216,16 +216,557 @@ var doc = `{
                 }
             },
             "delete": {
-                "description": "get user by ID",
+                "description": "get disease by ID",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Delete a user entity by ID",
-                "operationId": "delete-user",
+                "summary": "Delete a disease entity by ID",
+                "operationId": "delete-disease",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User ID",
+                        "description": "Disease ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/drugs": {
+            "get": {
+                "description": "list drug entities",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List drug entities",
+                "operationId": "list-drug",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Drug"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create drug",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create drug",
+                "operationId": "create-drug",
+                "parameters": [
+                    {
+                        "description": "Drug entity",
+                        "name": "drug",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.Drug"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Drug"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/drugtypes": {
+            "get": {
+                "description": "list drugtype entities",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List drugtype entities",
+                "operationId": "list-drugtype",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.DrugType"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create drugtype",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create drugtype",
+                "operationId": "create-drugtype",
+                "parameters": [
+                    {
+                        "description": "DrugType entity",
+                        "name": "drugtype",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.DrugType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.DrugType"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/drugtypes/{id}": {
+            "get": {
+                "description": "get drugtype by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a drugtype entity by ID",
+                "operationId": "get-drugtype",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "DrugType ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.DrugType"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "update drugtype by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update a drugtype entity by ID",
+                "operationId": "update-drugtype",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "DrugType ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "DrugType entity",
+                        "name": "drugtype",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.DrugType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.DrugType"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "get drugtype by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a drugtype entity by ID",
+                "operationId": "delete-drugtype",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "DrugType ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/employees": {
+            "get": {
+                "description": "list employee entities",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List employee entities",
+                "operationId": "list-employee",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.Employee"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create employee",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create employee",
+                "operationId": "create-employee",
+                "parameters": [
+                    {
+                        "description": "Employee entity",
+                        "name": "employee",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.Employee"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Employee"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/employees/{id}": {
+            "get": {
+                "description": "get employee by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a employee entity by ID",
+                "operationId": "get-employee",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Employee ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Employee"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "update employee by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update a employee entity by ID",
+                "operationId": "update-employee",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Employee ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Employee entity",
+                        "name": "employee",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ent.Employee"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ent.Employee"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "get employee by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a employee entity by ID",
+                "operationId": "delete-employee",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Employee ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -261,12 +802,13 @@ var doc = `{
         }
     },
     "definitions": {
-        "ent.User": {
+        "ent.Disease": {
             "type": "object",
             "properties": {
-                "age": {
-                    "description": "Age holds the value of the \"age\" field.",
-                    "type": "integer"
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the DiseaseQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.DiseaseEdges"
                 },
                 "id": {
                     "description": "ID of the ent.",
@@ -275,6 +817,128 @@ var doc = `{
                 "name": {
                     "description": "Name holds the value of the \"name\" field.",
                     "type": "string"
+                }
+            }
+        },
+        "ent.DiseaseEdges": {
+            "type": "object",
+            "properties": {
+                "drug": {
+                    "description": "Drug holds the value of the drug edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Drug"
+                    }
+                }
+            }
+        },
+        "ent.Drug": {
+            "type": "object",
+            "properties": {
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the DrugQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.DrugEdges"
+                },
+                "howto": {
+                    "description": "Howto holds the value of the \"howto\" field.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Name holds the value of the \"name\" field.",
+                    "type": "string"
+                },
+                "property": {
+                    "description": "Property holds the value of the \"property\" field.",
+                    "type": "string"
+                }
+            }
+        },
+        "ent.DrugEdges": {
+            "type": "object",
+            "properties": {
+                "disease": {
+                    "description": "Disease holds the value of the disease edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Disease"
+                },
+                "drugtype": {
+                    "description": "Drugtype holds the value of the drugtype edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.DrugType"
+                },
+                "employee": {
+                    "description": "Employee holds the value of the employee edge.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.Employee"
+                }
+            }
+        },
+        "ent.DrugType": {
+            "type": "object",
+            "properties": {
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the DrugTypeQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.DrugTypeEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Name holds the value of the \"name\" field.",
+                    "type": "string"
+                }
+            }
+        },
+        "ent.DrugTypeEdges": {
+            "type": "object",
+            "properties": {
+                "drug": {
+                    "description": "Drug holds the value of the drug edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Drug"
+                    }
+                }
+            }
+        },
+        "ent.Employee": {
+            "type": "object",
+            "properties": {
+                "edges": {
+                    "description": "Edges holds the relations/edges for other nodes in the graph.\nThe values are being populated by the EmployeeQuery when eager-loading is set.",
+                    "type": "object",
+                    "$ref": "#/definitions/ent.EmployeeEdges"
+                },
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Name holds the value of the \"name\" field.",
+                    "type": "string"
+                },
+                "userid": {
+                    "description": "Userid holds the value of the \"userid\" field.",
+                    "type": "integer"
+                }
+            }
+        },
+        "ent.EmployeeEdges": {
+            "type": "object",
+            "properties": {
+                "drug": {
+                    "description": "Drug holds the value of the drug edge.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ent.Drug"
+                    }
                 }
             }
         },
@@ -347,7 +1011,7 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "localhost:8080",
 	BasePath:    "/api/v1",
 	Schemes:     []string{},
-	Title:       "SUT SA Example API",
+	Title:       "SUT SA Example API Drug",
 	Description: "This is a sample server for SUT SE 2563",
 }
 

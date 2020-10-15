@@ -6,5 +6,14 @@ import (
 	"github.com/facebookincubator/ent/dialect/sql"
 )
 
-// User is the predicate function for user builders.
-type User func(*sql.Selector)
+// Disease is the predicate function for disease builders.
+type Disease func(*sql.Selector)
+
+// Drug is the predicate function for drug builders.
+type Drug func(*sql.Selector)
+
+// DrugType is the predicate function for drugtype builders.
+type DrugType func(*sql.Selector)
+
+// Employee is the predicate function for employee builders.
+type Employee func(*sql.Selector)

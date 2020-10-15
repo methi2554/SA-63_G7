@@ -4,17 +4,42 @@ import (
 	"context"
 	"log"
 
-	"github.com/KOB4k/app/controllers"
-	_ "github.com/KOB4k/app/docs"
-	"github.com/KOB4k/app/ent"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/methi2554/app/controllers"
+	_ "github.com/methi2554/app/docs"
+	"github.com/methi2554/app/ent"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title SUT SA Example API
+type Employees struct {
+	Employee []Employee
+}
+
+type Employee struct {
+	Name   string
+	Userid int
+}
+
+type Diseases struct {
+	Disease []Disease
+}
+
+type Disease struct {
+	Name string
+}
+
+type DrugTypes struct {
+	DrugType []DrugType
+}
+
+type DrugType struct {
+	Name string
+}
+
+// @title SUT SA Example API Drug
 // @version 1.0
 // @description This is a sample server for SUT SE 2563
 // @termsOfService http://swagger.io/terms/
@@ -58,7 +83,7 @@ func main() {
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	client, err := ent.Open("sqlite3", "file:ent?mode=memory&cache=shared&_fk=1")
+	client, err := ent.Open("sqlite3", "file:contagion.db?&cache=shared&_fk=1")
 	if err != nil {
 		log.Fatalf("fail to open sqlite3: %v", err)
 	}
@@ -69,8 +94,56 @@ func main() {
 	}
 
 	v1 := router.Group("/api/v1")
-	controllers.NewUserController(v1, client)
+	controllers.NewEmployeeController(v1, client)
+	controllers.NewDrugTypeController(v1, client)
+	controllers.NewDiseaseController(v1, client)
+	controllers.NewDrugController(v1, client)
 
+	// Set Employees Data
+	employees := Employees{
+		Employee: []Employee{
+			Employee{"คิม จงอิน", 23},
+			Employee{"โอ เซฮุน", 47},
+		},
+	}
+
+	for _, e := range employees.Employee {
+		client.Employee.
+			Create().
+			SetName(e.Name).
+			SetUserid(e.Userid).
+			Save(context.Background())
+	}
+
+	// Set drugtype Data
+	drugtypes := DrugTypes{
+		DrugType: []DrugType{
+			DrugType{"ยาเม็ด"},
+			DrugType{"ยาน้ำ"},
+			DrugType{"วัคซีน"},
+		},
+	}
+	for _, dt := range drugtypes.DrugType {
+		client.DrugType.
+			Create().
+			SetName(dt.Name).
+			Save(context.Background())
+	}
+
+	// Set disease Data
+	disease := Diseases{
+		Disease: []Disease{
+			Disease{"covid"},
+			Disease{"ไข้หวัดใหญ่"},
+			Disease{"เอดส์"},
+		},
+	}
+	for _, di := range disease.Disease {
+		client.Disease.
+			Create().
+			SetName(di.Name).
+			Save(context.Background())
+	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run()
 }
