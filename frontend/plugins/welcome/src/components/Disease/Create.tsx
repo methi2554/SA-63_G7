@@ -191,7 +191,7 @@ const Drug: FC<{}> = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            ระบบบันทึกข้อมูลยา
+            ระบบบันทึกข้อมูลยาโรคติดต่อ
           </Typography>
           <div>
             <IconButton
@@ -209,8 +209,13 @@ const Drug: FC<{}> = () => {
 
         <Grid container spacing={3}>
 
-          <Grid item xs={10}>
-            <h2 > ข้อมูลยา </h2>
+          <Grid 
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+          item xs={10}>
+            <h1 > ข้อมูลยา </h1>
           </Grid>
 
           <Grid item xs={12}>
@@ -332,7 +337,7 @@ const Drug: FC<{}> = () => {
               className={classes.buttonSty}
               onClick={save}
             >
-              บันทึกข้อมูลผู้ป่วย
+              บันทึกข้อมูลยา
               </Button>
           </Grid>
         </Grid>
