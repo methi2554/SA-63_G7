@@ -102,8 +102,8 @@ func main() {
 	// Set Employees Data
 	employees := Employees{
 		Employee: []Employee{
-			Employee{"คิม จงอิน", 23},
-			Employee{"โอ เซฮุน", 47},
+			Employee{"เมธี แตงอ่อน", 32319},
+			Employee{"name surname", 12345},
 		},
 	}
 
@@ -136,6 +136,8 @@ func main() {
 			Disease{"covid"},
 			Disease{"ไข้หวัดใหญ่"},
 			Disease{"เอดส์"},
+			Disease{"ซาร์ส"},
+			Disease{"เมอร์ส"},
 		},
 	}
 	for _, di := range disease.Disease {
