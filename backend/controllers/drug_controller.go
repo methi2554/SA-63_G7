@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 
 	"strconv"
 
@@ -156,6 +157,83 @@ func (ctl *DrugController) ListDrug(c *gin.Context) {
 	c.JSON(200, drugs)
 }
 
+// DeleteDrug handles DELETE requests to delete a drug entity
+// @Summary Delete a drug entity by ID
+// @Description get drug by ID
+// @ID delete-drug
+// @Produce  json
+// @Param id path int true "Drug ID"
+// @Success 200 {object} gin.H
+// @Failure 400 {object} gin.H
+// @Failure 404 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /drugs/{id} [delete]
+func (ctl *DrugController) DeleteDrug(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	err = ctl.client.Drug.
+		DeleteOneID(int(id)).
+		Exec(context.Background())
+	if err != nil {
+		c.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{"result": fmt.Sprintf("ok deleted %v", id)})
+}
+
+// UpdateDrug handles PUT requests to update a drug entity
+// @Summary Update a drug entity by ID
+// @Description update drug by ID
+// @ID update-drug
+// @Accept   json
+// @Produce  json
+// @Param id path int true "Drug ID"
+// @Param drugtype body ent.Drug true "Drug entity"
+// @Success 200 {object} ent.Drug
+// @Failure 400 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /drugs/{id} [put]
+func (ctl *DrugController) UpdateDrug(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	obj := ent.Drug{}
+	if err := c.ShouldBind(&obj); err != nil {
+		c.JSON(400, gin.H{
+			"error": "drugtype binding failed",
+		})
+		return
+	}
+	obj.ID = int(id)
+	fmt.Println(obj.ID)
+	u, err := ctl.client.Drug.
+		UpdateOneID(int(id)).
+		SetName(obj.Name).
+		Save(context.Background())
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "update failed",
+		})
+		return
+	}
+
+	c.JSON(200, u)
+}
+
 // NewDrugController creates and registers handles for the drug controller
 func NewDrugController(router gin.IRouter, client *ent.Client) *DrugController {
 	dc := &DrugController{
@@ -174,5 +252,7 @@ func (ctl *DrugController) register() {
 
 	drugs.POST("", ctl.CreateDrug)
 	drugs.GET("", ctl.ListDrug)
+	drugs.PUT(":id", ctl.UpdateDrug)
+	drugs.DELETE(":id", ctl.DeleteDrug)
 
 }

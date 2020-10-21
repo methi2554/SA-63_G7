@@ -49,6 +49,10 @@ export interface DeleteDiseaseRequest {
     id: number;
 }
 
+export interface DeleteDrugRequest {
+    id: number;
+}
+
 export interface DeleteDrugtypeRequest {
     id: number;
 }
@@ -92,6 +96,11 @@ export interface ListEmployeeRequest {
 export interface UpdateDiseaseRequest {
     id: number;
     disease: EntDisease;
+}
+
+export interface UpdateDrugRequest {
+    id: number;
+    drugtype: EntDrug;
 }
 
 export interface UpdateDrugtypeRequest {
@@ -278,6 +287,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async deleteDisease(requestParameters: DeleteDiseaseRequest): Promise<object> {
         const response = await this.deleteDiseaseRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * get drug by ID
+     * Delete a drug entity by ID
+     */
+    async deleteDrugRaw(requestParameters: DeleteDrugRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteDrug.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/drugs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * get drug by ID
+     * Delete a drug entity by ID
+     */
+    async deleteDrug(requestParameters: DeleteDrugRequest): Promise<object> {
+        const response = await this.deleteDrugRaw(requestParameters);
         return await response.value();
     }
 
@@ -621,6 +662,45 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async updateDisease(requestParameters: UpdateDiseaseRequest): Promise<EntDisease> {
         const response = await this.updateDiseaseRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     * update drug by ID
+     * Update a drug entity by ID
+     */
+    async updateDrugRaw(requestParameters: UpdateDrugRequest): Promise<runtime.ApiResponse<EntDrug>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateDrug.');
+        }
+
+        if (requestParameters.drugtype === null || requestParameters.drugtype === undefined) {
+            throw new runtime.RequiredError('drugtype','Required parameter requestParameters.drugtype was null or undefined when calling updateDrug.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/drugs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EntDrugToJSON(requestParameters.drugtype),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EntDrugFromJSON(jsonValue));
+    }
+
+    /**
+     * update drug by ID
+     * Update a drug entity by ID
+     */
+    async updateDrug(requestParameters: UpdateDrugRequest): Promise<EntDrug> {
+        const response = await this.updateDrugRaw(requestParameters);
         return await response.value();
     }
 

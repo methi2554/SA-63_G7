@@ -102,8 +102,8 @@ func main() {
 	// Set Employees Data
 	employees := Employees{
 		Employee: []Employee{
-			Employee{"เมธี แตงอ่อน", 32319},
-			Employee{"name surname", 12345},
+			Employee{"D12345", 1234},
+			Employee{"D54321", 7890},
 		},
 	}
 
