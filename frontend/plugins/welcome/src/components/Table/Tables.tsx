@@ -9,24 +9,18 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { DefaultApi } from '../../api/apis';
-import { EntDrugTypeFromJSON, mapValues } from '../../api';
-import { ListItem } from '@material-ui/core';
 const useStyles = makeStyles({
  table: {
    minWidth: 650,
  },
 });
  
-
 export default function ComponentsTable() {
  const classes = useStyles();
  const api = new DefaultApi();
  const [drugs, setDrugs] = useState(Array);
  const [loading, setLoading] = useState(true);
- const [employees, setEmployees] = useState(Array);
- const [diseases, setDiseases] = useState(Array);
- const [drugtypes, setDrugTypes] = useState(Array);
- 
+
  useEffect(() => {
    const getDrugs = async () => {
      const res = await api.listDrug({ limit: 10, offset: 0 });
@@ -36,6 +30,10 @@ export default function ComponentsTable() {
    getDrugs();
  }, [loading]);
  
+ const listEmployees = drugs.map((name) =>
+ <li>{drugs.map.name}</li>
+);
+
  const deleteDrugs = async (id: number) => {
    const res = await api.deleteDrug({ id: id });
    setLoading(true);
@@ -58,12 +56,12 @@ export default function ComponentsTable() {
          {drugs.map((item:any) => (
            <TableRow key={item.id}>
              
-             <TableCell align="center">{item.employee}</TableCell>
+             <TableCell align="center">{item.edges?.employee?.name}</TableCell>
              <TableCell align="center">{item.name}</TableCell>
-             <TableCell align="center">{item.drugtype}</TableCell>
+             <TableCell align="center">{item.edges?.drugtype?.name}</TableCell>
              <TableCell align="center">{item.property}</TableCell>
              <TableCell align="center">{item.howto}</TableCell>
-             <TableCell align="center">{item.Disease}</TableCell>
+             <TableCell align="center">{item.edges?.disease?.name}</TableCell>
              <TableCell align="center">
                <Button
                  onClick={() => {

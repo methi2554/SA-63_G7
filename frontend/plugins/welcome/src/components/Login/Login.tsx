@@ -92,9 +92,9 @@ const Login: FC<{}> = () => {
         icon: 'success',
         title: 'เข้าสู่ระบบสำเร็จ',
       });
-      //redirec Page ... http://localhost:3000/Disease
-      window.location.href = "http://localhost:3000/Disease";
-      console.log("LOGIN TO DISEASE");
+      //redirec Page ... http://localhost:3000/Welcome
+      window.location.href = "http://localhost:3000/Welcome";
+      console.log("LOGIN TO WELCOME");
     } else {
       Toast.fire({
         icon: 'error',
