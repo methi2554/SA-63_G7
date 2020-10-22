@@ -189,6 +189,8 @@ const Drug: FC<{}> = () => {
     //redirec Page ... http://localhost:3000/
     window.location.href = "http://localhost:3000/";
   }
+
+
   return (
     
     <div className={classes.root}>
@@ -247,7 +249,7 @@ const Drug: FC<{}> = () => {
                 {employees.map(item => {
                   return (
                     <MenuItem key={item.id} value={item.id}>
-                    {item.userid}
+                    {item.name}
                     </MenuItem>
                   );
                 })}

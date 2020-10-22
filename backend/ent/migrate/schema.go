@@ -11,7 +11,7 @@ var (
 	// DiseasesColumns holds the columns for the "diseases" table.
 	DiseasesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString, Unique: true},
 	}
 	// DiseasesTable holds the schema information for the "diseases" table.
 	DiseasesTable = &schema.Table{
@@ -23,9 +23,9 @@ var (
 	// DrugsColumns holds the columns for the "drugs" table.
 	DrugsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "howto", Type: field.TypeString},
-		{Name: "property", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString, Unique: true},
+		{Name: "howto", Type: field.TypeString, Unique: true},
+		{Name: "property", Type: field.TypeString, Unique: true},
 		{Name: "disease_drug", Type: field.TypeInt, Nullable: true},
 		{Name: "drug_type_drug", Type: field.TypeInt, Nullable: true},
 		{Name: "employee_drug", Type: field.TypeInt, Nullable: true},
@@ -62,7 +62,7 @@ var (
 	// DrugTypesColumns holds the columns for the "drug_types" table.
 	DrugTypesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString, Unique: true},
 	}
 	// DrugTypesTable holds the schema information for the "drug_types" table.
 	DrugTypesTable = &schema.Table{
@@ -74,8 +74,8 @@ var (
 	// EmployeesColumns holds the columns for the "employees" table.
 	EmployeesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "userid", Type: field.TypeInt},
+		{Name: "name", Type: field.TypeString, Unique: true},
+		{Name: "userid", Type: field.TypeInt, Unique: true},
 	}
 	// EmployeesTable holds the schema information for the "employees" table.
 	EmployeesTable = &schema.Table{
